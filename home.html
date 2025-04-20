@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home - Jammr</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .container h1 {
+            margin-bottom: 20px;
+        }
+
+        .container p {
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .container h2 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .feedback-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feedback-form textarea {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+
+        .feedback-form button {
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #feedbackStatus {
+            font-style: italic;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="brand"><img src="logo.png" alt="Spotify"> Jammr</li>
+            <li><a href="index.html" style="color: white; text-decoration: none;">Back to Music</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Welcome to the Home Page!</h1>
+
+        <p>Thank you so much for viewing the clown site I made 🎪</p>
+
+        <h2>About Me</h2>
+
+        <p>Hi! I'm the creator of this little site.</p>
+        
+        <p>I love coding, music, and making fun web projects like this.</p>
+        
+        <p>Hope you enjoyed exploring it!</p>
+
+        <h2>We'd Love Your Feedback!</h2>
+        <form class="feedback-form" id="feedbackForm">
+            <textarea name="feedback" placeholder="Write your feedback here..." required></textarea>
+            <button type="submit">Submit</button>
+        </form>
+        <p id="feedbackStatus" style="margin-top:10px;"></p>
+    </div>
+
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const feedback = e.target.feedback.value;
+            const status = document.getElementById('feedbackStatus');
+
+            fetch('https://script.google.com/macros/s/AKfycbxN3M4LZMtOyLA8BTnq21sN4ewfAuAm98IUb2kfgqW3aL-2YzUTkngh56dUM3e0WBog/exec', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `feedback=${encodeURIComponent(feedback)}`
+            })
+            .then(() => {
+                status.textContent = "Thanks for your feedback!";
+                e.target.reset();
+            })
+            .catch((error) => {
+                status.textContent = "Something went wrong. Please try again!";
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
+
+
