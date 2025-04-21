@@ -1,0 +1,78 @@
+<!-- history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jammr | History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            padding: 20px;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #1f1f1f;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        a {
+            color: #00aeff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .clear-btn {
+            margin-top: 10px;
+            padding: 6px 12px;
+            background-color: #ff4747;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Song Play History</h2>
+    <ul id="historyList"></ul>
+    <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+    <br><br>
+    <a href="index.html">⬅ Back to Player</a>
+
+    <script>
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem("playHistory")) || [];
+            const list = document.getElementById("historyList");
+            list.innerHTML = "";
+
+            if (history.length === 0) {
+                list.innerHTML = "<li>No songs played yet.</li>";
+                return;
+            }
+
+            history.reverse().forEach(entry => {
+                const li = document.createElement("li");
+                li.textContent = `${entry.song} - ${entry.time}`;
+                list.appendChild(li);
+            });
+        }
+
+        function clearHistory() {
+            localStorage.removeItem("playHistory");
+            displayHistory();
+        }
+
+        displayHistory();
+    </script>
+</body>
+</html>

@@ -22,6 +22,16 @@ let songs = [
     { songName: "Na Jaana - Salam-e-Ishq", filePath: "songs/4.mp3", coverPath: "covers/10.jpg" },
 ];
 
+// Function to log song history
+function logSongHistory(songName) {
+    const now = new Date();
+    const timestamp = now.toLocaleString();
+    let history = JSON.parse(localStorage.getItem("playHistory")) || [];
+    history.push({ song: songName, time: timestamp });
+    localStorage.setItem("playHistory", JSON.stringify(history));
+}
+
+// Display song list
 songItems.forEach((element, i) => {
     element.getElementsByTagName("img")[0].src = songs[i].coverPath;
     element.getElementsByClassName("songName")[0].innerText = songs[i].songName;
@@ -39,6 +49,7 @@ const makeAllPlays = () => {
 masterPlay.addEventListener('click', () => {
     if (audioElement.paused || audioElement.currentTime <= 0) {
         audioElement.play();
+        logSongHistory(songs[songIndex].songName);
         masterPlay.classList.remove('fa-circle-play');
         masterPlay.classList.add('fa-circle-pause');
         gif.style.opacity = 1;
@@ -76,6 +87,7 @@ Array.from(document.getElementsByClassName('songItemPlay')).forEach((el) => {
         masterSongName.innerText = songs[songIndex].songName;
         audioElement.currentTime = 0;
         audioElement.play();
+        logSongHistory(songs[songIndex].songName);
         gif.style.opacity = 1;
         masterPlay.classList.remove('fa-circle-play');
         masterPlay.classList.add('fa-circle-pause');
@@ -89,6 +101,7 @@ document.getElementById('next').addEventListener('click', () => {
     masterSongName.innerText = songs[songIndex].songName;
     audioElement.currentTime = 0;
     audioElement.play();
+    logSongHistory(songs[songIndex].songName);
     masterPlay.classList.remove('fa-circle-play');
     masterPlay.classList.add('fa-circle-pause');
     makeAllPlays();
@@ -103,6 +116,7 @@ document.getElementById('previous').addEventListener('click', () => {
     masterSongName.innerText = songs[songIndex].songName;
     audioElement.currentTime = 0;
     audioElement.play();
+    logSongHistory(songs[songIndex].songName);
     masterPlay.classList.remove('fa-circle-play');
     masterPlay.classList.add('fa-circle-pause');
     makeAllPlays();
@@ -110,163 +124,3 @@ document.getElementById('previous').addEventListener('click', () => {
     document.getElementsByClassName('songItemPlay')[songIndex].classList.add('fa-circle-pause');
 });
 
-// Show all feedback from localStorage
-function displayFeedback() {
-    const feedbackList = document.getElementById('feedbackList');
-    if (!feedbackList) return;
-
-    feedbackList.innerHTML = "";
-    const feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-
-    feedbacks.forEach(fb => {
-        const li = document.createElement('li');
-        li.textContent = fb;
-        feedbackList.appendChild(li);
-    });
-}
-
-window.addEventListener('DOMContentLoaded', displayFeedback);
-
-// Unified Feedback Handler
-document.getElementById('feedbackForm')?.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const feedback = this.feedback.value.trim();
-    const status = document.getElementById('feedbackStatus');
-
-    if (!feedback) {
-        status.textContent = "Please write something!";
-        return;
-    }
-
-    let feedbacks = JSON.parse(localStorage.getItem('feedbacks')) || [];
-    feedbacks.push(feedback);
-    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
-    displayFeedback();
-
-    fetch("https://script.google.com/macros/s/AKfycbxN3M4LZMtOyLA8BTnq21sN4ewfAuAm98IUb2kfgqW3aL-2YzUTkngh56dUM3e0WBog/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `feedback=${encodeURIComponent(feedback)}`
-    })
-    .then(res => res.text())
-    .then(() => {
-        status.textContent = "Thank you for your feedback!";
-        this.reset();
-    })
-    .catch(err => {
-        console.error(err);
-        status.textContent = "Error submitting feedback. Try again later.";
-    });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-    // Your chatbot logic here
-    const chatIcon = document.getElementById("chatIcon");
-    const chatbot = document.getElementById("chatbot");
-    const closeChat = document.getElementById("closeChat");
-    const sendBtn = document.getElementById("sendBtn");
-    const userInput = document.getElementById("userInput");
-    const chatMessages = document.getElementById("chatMessages");
-
-    chatIcon.onclick = () => chatbot.style.display = "flex";
-    closeChat.onclick = () => chatbot.style.display = "none";
-
-    sendBtn.onclick = () => {
-        const input = userInput.value.trim().toLowerCase();
-        if (!input) return;
-
-        addMessage("You", input);
-        respond(input);
-        userInput.value = "";
-    };
-
-    function addMessage(sender, text) {
-        const msg = document.createElement("div");
-        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-        chatMessages.appendChild(msg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-    function respond(input) {
-        const lowerInput = input.toLowerCase();
-        let response = "";
-    
-        const responses = [
-            {
-                match: ["hi", "hello", "hey"],
-                reply: ["Hey there! 😊", "Hello! How can I help you today?", "Hi! Ready to jam? 🎶"]
-            },
-            {
-                match: ["how are you", "what's up", "how’s it going"],
-                reply: ["I'm vibin' 😎 How about you?", "Doing great! Just playing some beats 🎧"]
-            },
-            {
-                match: ["your name", "who are you"],
-                reply: ["I'm Jammr, your music buddy! 🎵"]
-            },
-            {
-                match: ["what can you do", "features", "help"],
-                reply: ["I can suggest songs, genres, artists, and keep you company while you vibe 🎶"]
-            },
-            {
-                match: ["rock", "pop", "lofi", "romantic", "party"],
-                reply: {
-                    "rock": "🎸 Rock on with Linkin Park, Imagine Dragons, or Arctic Monkeys!",
-                    "pop": "🎤 Pop hits? Try Dua Lipa, Harry Styles, or Taylor Swift!",
-                    "lofi": "☕ Chill out with Lofi Girl, Chillhop, and late night vibes.",
-                    "romantic": "❤️ Feel the love with Arijit Singh, Ed Sheeran, or Bollywood melodies!",
-                    "party": "🎉 Get the party started with David Guetta, Badshah, and Neha Kakkar!"
-                }
-            },
-            {
-                match: ["joke"],
-                reply: ["Why don’t skeletons fight each other? Because they don’t have the guts! 😄"]
-            },
-            {
-                match: ["fun fact", "did you know"],
-                reply: ["Flamingos are pink because of the shrimp they eat! 🦩"]
-            },
-            {
-                match: ["thank you", "thanks"],
-                reply: ["Anytime! ✨ Enjoy the music!"]
-            },
-            {
-                match: ["bye", "goodbye"],
-                reply: ["Goodbye! ✌️ Come back anytime to vibe!"]
-            }
-        ];
-    
-        let matched = false;
-    
-        responses.forEach(item => {
-            if (Array.isArray(item.match)) {
-                item.match.forEach(keyword => {
-                    if (lowerInput.includes(keyword)) {
-                        matched = true;
-                        if (typeof item.reply === "string") {
-                            response = item.reply;
-                        } else if (Array.isArray(item.reply)) {
-                            response = item.reply[Math.floor(Math.random() * item.reply.length)];
-                        } else if (typeof item.reply === "object") {
-                            response = item.reply[keyword];
-                        }
-                    }
-                });
-            }
-        });
-    
-        if (!matched) {
-            const fallbackResponses = [
-                "Hmm... I didn’t get that, but I'm still learning! 😊",
-                "Interesting! Tell me more!",
-                "I'm better with music stuff, but I love chatting too!"
-            ];
-            response = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-        }
-    
-        addMessage("Jammr", response);
-    }
-    
-    
-    
-    
-});
