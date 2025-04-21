@@ -2,77 +2,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Jammr | History</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            padding: 20px;
-        }
-        h2 {
-            margin-bottom: 10px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: #1f1f1f;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
-        }
-        a {
-            color: #00aeff;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .clear-btn {
-            margin-top: 10px;
-            padding: 6px 12px;
-            background-color: #ff4747;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Jammr | History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Varela Round', sans-serif;
+      background-color: antiquewhite;
+    }
+
+    nav ul {
+      display: flex;
+      align-items: center;
+      list-style-type: none;
+      height: 65px;
+      background-color: black;
+      color: white;
+      padding: 0 20px;
+      margin: 0;
+    }
+
+    nav ul li {
+      padding: 0 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      font-weight: bolder;
+      font-size: 1.3rem;
+      font-family: 'Ubuntu', sans-serif;
+    }
+
+    .brand img {
+      width: 44px;
+      padding: 0 8px;
+    }
+
+    .container {
+      min-height: 72vh;
+      background-color: black;
+      color: white;
+      display: block;
+      margin: 23px auto;
+      width: 70%;
+      border-radius: 12px;
+      padding: 34px;
+      background-image: url('bg.jpg');
+      background-size: cover;
+      background-position: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background: #1f1f1f;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    a {
+      color: #00aeff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .clear-btn {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background-color: #ff4747;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
+  <nav>
+    <ul>
+      <li class="brand"><img src="logo.png" alt="Jammr"> Jammr</li>
+      <li><a href="index.html" style="color:white;">Home</a></li>
+      <li><a href="history.html" style="color:white;">History</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
     <h2>Song Play History</h2>
     <ul id="historyList"></ul>
     <button class="clear-btn" onclick="clearHistory()">Clear History</button>
     <br><br>
     <a href="index.html">⬅ Back to Player</a>
+  </div>
 
-    <script>
-        function displayHistory() {
-            const history = JSON.parse(localStorage.getItem("playHistory")) || [];
-            const list = document.getElementById("historyList");
-            list.innerHTML = "";
+  <script>
+    function displayHistory() {
+      const history = JSON.parse(localStorage.getItem("playHistory")) || [];
+      const list = document.getElementById("historyList");
+      list.innerHTML = "";
 
-            if (history.length === 0) {
-                list.innerHTML = "<li>No songs played yet.</li>";
-                return;
-            }
+      if (history.length === 0) {
+        list.innerHTML = "<li>No songs played yet.</li>";
+        return;
+      }
 
-            history.reverse().forEach(entry => {
-                const li = document.createElement("li");
-                li.textContent = `${entry.song} - ${entry.time}`;
-                list.appendChild(li);
-            });
-        }
+      history.reverse().forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = `${entry.song} - ${entry.time}`;
+        list.appendChild(li);
+      });
+    }
 
-        function clearHistory() {
-            localStorage.removeItem("playHistory");
-            displayHistory();
-        }
+    function clearHistory() {
+      localStorage.removeItem("playHistory");
+      displayHistory();
+    }
 
-        displayHistory();
-    </script>
+    displayHistory();
+  </script>
 </body>
 </html>

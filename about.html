@@ -33,6 +33,40 @@
         <p>
             More features coming soon, including playlists, search, and custom themes!
         </p>
+
+        <!-- Feedback Section -->
+        <h2>Feedback</h2>
+        <form id="feedback-form">
+            <textarea id="message" name="feedback" rows="5" placeholder="Enter your feedback here..." required></textarea>
+
+            <button type="submit" style="margin-top: 10px;">Submit Feedback</button>
+        </form>
+        <div id="success-message" style="color: green; margin-top: 10px;"></div>
     </div>
+
+    <script>
+        const form = document.getElementById('feedback-form');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const message = document.getElementById('message').value;
+
+            fetch("https://script.google.com/macros/s/AKfycbxN3M4LZMtOyLA8BTnq21sN4ewfAuAm98IUb2kfgqW3aL-2YzUTkngh56dUM3e0WBog/exec", {
+                method: "POST",
+                body: new URLSearchParams({ feedback: message })
+            })
+            .then(res => res.text())
+            .then(data => {
+                successMessage.textContent = "Feedback submitted!";
+                form.reset();
+            })
+            .catch(err => {
+                successMessage.textContent = "Error submitting feedback. Please try again.";
+                successMessage.style.color = "red";
+            });
+        });
+    </script>
 </body>
 </html>
+

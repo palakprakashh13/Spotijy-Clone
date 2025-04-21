@@ -1,76 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Spotify - Your favourite music is here</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify - Your favourite music is here</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        nav ul li, nav ul li a {
+            cursor: default;
+            user-select: none;
+        }
+    </style>
+</head>
+
 <!-- Chatbot UI -->
 <div id="chatbot" style="display:none; flex-direction: column; position: fixed; bottom: 20px; right: 20px; width: 300px; height: 400px; background: white; border: 1px solid #ccc; padding: 10px; z-index: 999;">
     <button id="closeChat">Close</button>
     <div id="chatMessages" style="flex-grow: 1; overflow-y: auto; margin: 10px 0;"></div>
     <input type="text" id="userInput" placeholder="Ask me something..." />
     <button id="sendBtn">Send</button>
-  </div>
-  <!-- Chatbot Container -->
-<div id="chatbot" style="display: none;">
-    <div id="chatMessages"></div>
-    <input type="text" id="userInput" placeholder="Type a message..." />
-    <button id="sendBtn">Send</button>
-    <button id="closeChat">Close</button>
 </div>
 
-  <!-- Chat Icon -->
-  <button id="chatIcon" style="position: fixed; bottom: 20px; right: 20px; z-index: 999;">Chat 🎤</button>
-  
-  <!-- Chatbot Script -->
-  <script>
+<!-- Chat Icon -->
+<button id="chatIcon" style="position: fixed; bottom: 20px; right: 20px; z-index: 999;">Chat 🎤</button>
+
+<!-- Chatbot Script -->
+<script>
     const chatIcon = document.getElementById("chatIcon");
     const chatbot = document.getElementById("chatbot");
     const closeChat = document.getElementById("closeChat");
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
     const chatMessages = document.getElementById("chatMessages");
-  
+
     chatIcon.onclick = () => chatbot.style.display = "flex";
     closeChat.onclick = () => chatbot.style.display = "none";
-  
+
     sendBtn.onclick = () => {
-      const input = userInput.value.trim().toLowerCase();
-      if (!input) return;
-  
-      addMessage("You", input);
-      setTimeout(() => respond(input), 500);
-      userInput.value = "";
+        const input = userInput.value.trim().toLowerCase();
+        if (!input) return;
+
+        addMessage("You", input);
+        setTimeout(() => respond(input), 500);
+        userInput.value = "";
     };
-  
+
     function addMessage(sender, text) {
-      const msg = document.createElement("div");
-      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-      chatMessages.appendChild(msg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+        const msg = document.createElement("div");
+        msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        chatMessages.appendChild(msg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-  
+
     function respond(input) {
-      let response = "Hmm, not sure what you meant. Try saying something like 'rock', 'lofi', 'party', or 'chill'. 🎵";
-  
-      if (input.includes("rock")) {
-        response = "🎸 Rock mode on! Try Linkin Park, Nirvana, or The Killers!";
-      } else if (input.includes("lofi")) {
-        response = "🌧️ Time for chill vibes. Try Lofi Girl or coding beats!";
-      } else if (input.includes("party")) {
-        response = "🎉 Let’s get the party started! Pump up some Dua Lipa or David Guetta.";
-      } else if (input.includes("chill")) {
-        response = "😌 Chill time? Acoustic hits and ambient playlists coming right up.";
-      }
-  
-      addMessage("Jammr", response);
+        let response = "Hmm, not sure what you meant. Try saying something like 'rock', 'lofi', 'party', or 'chill'. 🎵";
+
+        if (input.includes("rock")) {
+            response = "🎸 Rock mode on! Try Linkin Park, Nirvana, or The Killers!";
+        } else if (input.includes("lofi")) {
+            response = "🌧️ Time for chill vibes. Try Lofi Girl or coding beats!";
+        } else if (input.includes("party")) {
+            response = "🎉 Let’s get the party started! Pump up some Dua Lipa or David Guetta.";
+        } else if (input.includes("chill")) {
+            response = "😌 Chill time? Acoustic hits and ambient playlists coming right up.";
+        }
+
+        addMessage("Jammr", response);
     }
-  </script>
-  
-  
+</script>
+
 <body>
     <nav>
         <ul>
@@ -78,8 +77,6 @@
             <li><a href="home.html" style="color: white; text-decoration: none;">Home</a></li>
             <li><a href="about.html" style="color: white; text-decoration: none;">About</a></li> 
             <li><a href="history.html" style="color: white; text-decoration: none;">History</a></li>
-            
-
         </ul>
     </nav>
 
@@ -154,9 +151,10 @@
             <span id="masterSongName">Warriyo - Mortals [NCS Release]</span>
         </div>
     </div>
-
+    
+    <audio id="audioElement" src="songs/1.mp3"></audio>
     <script src="script.js"></script>
     <script src="https://kit.fontawesome.com/9699eef1be.js" crossorigin="anonymous"></script>
-    
+    <canvas id="visualizer" width="800" height="150" style="display: block; margin: 20px auto; background: #111; border-radius: 10px;"></canvas>
 </body>
 </html>
