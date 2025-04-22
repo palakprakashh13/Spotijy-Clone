@@ -1,69 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Jammr</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - Jammr</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Prevent text selection and text cursor globally */
+    body, html, p, h1, h2, ul, li, div, nav, .container, * {
+      cursor: default !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -ms-user-select: none !important;
+      -moz-user-select: none !important;
+    }
+
+    /* Enable text input and selection only inside textarea */
+    .feedback-form textarea {
+      cursor: text !important;
+      user-select: text !important;
+      -webkit-user-select: text !important;
+      -ms-user-select: text !important;
+      -moz-user-select: text !important;
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li class="brand"><img src="logo.png" alt="Jammr logo"> Jammr</li>
-            <li><a href="index.html" style="color: white; text-decoration: none;">Back to Music</a></li>
-        </ul>
-    </nav>
+  <nav>
+    <ul>
+      <li class="brand"><img src="logo.png" alt="Jammr logo" /> Jammr</li>
+      <li>
+        <a href="index.html" style="color: white; text-decoration: none;">Back to Music</a>
+      </li>
+    </ul>
+  </nav>
 
-    <div class="container">
-        <h1>About Jammr</h1>
-        <p>
-            <strong>Jammr</strong> is a web-based music player inspired by Spotify. It brings you a handpicked playlist of royalty-free NCS (No Copyright Sounds) tracks, allowing seamless playback, progress tracking, and song navigation. Whether you're studying, working, or chilling, Jammr keeps the vibe alive with smooth controls and a minimal interface.
-        </p>
-        <p>
-            Developed as a fun frontend project, Jammr showcases basic features like:
-            <ul>
-                <li>Responsive UI with HTML, CSS, and JavaScript</li>
-                <li>Play/Pause, Next/Previous song controls</li>
-                <li>Dynamic song list and progress bar</li>
-                <li>Visually engaging GIF-based animation</li>
-            </ul>
-        </p>
-        <p>
-            More features coming soon, including playlists, search, and custom themes!
-        </p>
+  <div class="container">
+    <h1>About Jammr</h1>
+    <p>
+      <strong>Jammr</strong> is a web-based music player inspired by Spotify.
+      It brings you a handpicked playlist of royalty-free NCS (No Copyright Sounds)
+      tracks, allowing seamless playback, progress tracking, and song navigation.
+      Whether you're studying, working, or chilling, Jammr keeps the vibe alive
+      with smooth controls and a minimal interface.
+    </p>
+    <p>
+      Developed as a fun frontend project, Jammr showcases basic features like:
+      <ul>
+        <li>Responsive UI with HTML, CSS, and JavaScript</li>
+        <li>Play/Pause, Next/Previous song controls</li>
+        <li>Dynamic song list and progress bar</li>
+        <li>Visually engaging GIF-based animation</li>
+      </ul>
+    </p>
+    <p>
+      More features coming soon, including playlists, search, and custom themes!
+    </p>
 
-        <!-- Feedback Section -->
-        <h2>Feedback</h2>
-        <form id="feedback-form">
-            <textarea id="message" name="feedback" rows="5" placeholder="Enter your feedback here..." required></textarea>
+    <!-- Feedback Section -->
+    <h2>Feedback</h2>
+    <form id="feedback-form" class="feedback-form">
+      <textarea id="message" name="feedback" rows="5" placeholder="Enter your feedback here..." required></textarea>
+      <button type="submit" class="submit-btn">Submit Feedback</button>
+    </form>
+    <div id="success-message"></div>
+  </div>
 
-            <button type="submit" style="margin-top: 10px;">Submit Feedback</button>
-        </form>
-        <div id="success-message" style="color: green; margin-top: 10px;"></div>
-    </div>
+  <script>
+    const form = document.getElementById("feedback-form");
+    const successMessage = document.getElementById("success-message");
 
-    <script>
-        const form = document.getElementById('feedback-form');
-        const successMessage = document.getElementById('success-message');
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const message = document.getElementById("message").value;
 
-        form.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const message = document.getElementById('message').value;
-
-            fetch("https://script.google.com/macros/s/AKfycbxN3M4LZMtOyLA8BTnq21sN4ewfAuAm98IUb2kfgqW3aL-2YzUTkngh56dUM3e0WBog/exec", {
-                method: "POST",
-                body: new URLSearchParams({ feedback: message })
-            })
-            .then(res => res.text())
-            .then(data => {
-                successMessage.textContent = "Feedback submitted!";
-                form.reset();
-            })
-            .catch(err => {
-                successMessage.textContent = "Error submitting feedback. Please try again.";
-                successMessage.style.color = "red";
-            });
+      fetch("https://script.google.com/macros/s/AKfycbxN3M4LZMtOyLA8BTnq21sN4ewfAuAm98IUb2kfgqW3aL-2YzUTkngh56dUM3e0WBog/exec", {
+        method: "POST",
+        body: new URLSearchParams({ feedback: message }),
+      })
+        .then((res) => res.text())
+        .then((data) => {
+          successMessage.textContent = "Feedback submitted! Thank you!";
+          successMessage.style.color = "green";
+          form.reset();
+        })
+        .catch((err) => {
+          successMessage.textContent = "Error submitting feedback. Please try again.";
+          successMessage.style.color = "red";
         });
-    </script>
+    });
+  </script>
 </body>
 </html>
+
+

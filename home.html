@@ -5,6 +5,81 @@
     <title>Home - Jammr</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Hide caret and selection globally */
+        * {
+            caret-color: transparent !important;
+            user-select: none !important;
+        }
+
+        /* Extra: Disable caret in everything except input/textarea */
+        body *:not(input):not(textarea) {
+            caret-color: transparent !important;
+            user-select: none !important;
+        }
+
+        /* Block caret even if contenteditable is present */
+        [contenteditable="true"] {
+            caret-color: transparent !important;
+            user-select: none !important;
+            outline: none !important;
+        }
+
+        /* Prevent non-input focusable elements from being focusable */
+        [tabindex]:not(input):not(textarea),
+        div:focus,
+        span:focus {
+            outline: none !important;
+            caret-color: transparent !important;
+            user-select: none !important;
+        }
+
+        /* Enable caret and selection for input/textarea when focused */
+        input:focus, textarea:focus {
+            caret-color: black !important;
+            user-select: text !important;
+        }
+
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #222;
+            padding: 10px 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li.brand {
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        nav img {
+            height: 24px;
+            margin-right: 8px;
+        }
+
+        .container {
+            padding: 30px 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+
         .container h1 {
             margin-bottom: 20px;
         }
@@ -32,6 +107,7 @@
             resize: vertical;
             min-height: 100px;
             margin-bottom: 10px;
+            color: black;
         }
 
         .feedback-form button {
@@ -46,7 +122,7 @@
 
         #feedbackStatus {
             font-style: italic;
-            color: green;
+            color: limegreen;
         }
     </style>
 </head>
@@ -77,6 +153,12 @@
             <button type="submit">Submit</button>
         </form>
         <p id="feedbackStatus" style="margin-top:10px;"></p>
+
+        <!-- === Chatbot UI START === -->
+        <div id="chatBox" style="height: 200px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin-top: 40px; background-color: #333; color: #fff;"></div>
+        <input type="text" id="chatInput" placeholder="Ask me anything..." style="width: 75%; padding: 10px; margin-top: 10px; border-radius: 5px; border: none;" />
+        <button id="sendChat" style="padding: 10px 15px; border: none; background-color: #00aeff; color: white; border-radius: 5px; cursor: pointer;">Send</button>
+        <!-- === Chatbot UI END === -->
     </div>
 
     <script>
@@ -103,8 +185,50 @@
                 console.error("Error:", error);
             });
         });
+
+        // === Chatbot JS ===
+        document.getElementById('sendChat').addEventListener('click', async () => {
+            const input = document.getElementById('chatInput');
+            const chatBox = document.getElementById('chatBox');
+            const userText = input.value.trim();
+
+            if (!userText) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.textContent = "You: " + userText;
+            chatBox.appendChild(userMsg);
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userText })
+                });
+
+                const data = await response.json();
+                const botMsg = document.createElement('div');
+                botMsg.textContent = "Bot: " + data.reply;
+                chatBox.appendChild(botMsg);
+            } catch (error) {
+                const errorMsg = document.createElement('div');
+                errorMsg.textContent = "Bot: Error fetching response.";
+                chatBox.appendChild(errorMsg);
+                console.error("Chatbot error:", error);
+            }
+
+            input.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        // === Prevent focus/caret on click for all elements except inputs and textareas ===
+        document.addEventListener('mousedown', function (e) {
+            const tag = e.target.tagName.toLowerCase();
+            if (tag !== 'input' && tag !== 'textarea') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
-
-

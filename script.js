@@ -76,21 +76,41 @@ myProgressBar.addEventListener('change', () => {
     audioElement.currentTime = (myProgressBar.value * audioElement.duration) / 100;
 });
 
-// Individual song play buttons
+// ✅ Updated: Individual song play/pause toggle
 Array.from(document.getElementsByClassName('songItemPlay')).forEach((el) => {
     el.addEventListener('click', (e) => {
-        makeAllPlays();
-        songIndex = parseInt(e.target.id);
-        e.target.classList.remove('fa-circle-play');
-        e.target.classList.add('fa-circle-pause');
-        audioElement.src = `songs/${songIndex + 1}.mp3`;
-        masterSongName.innerText = songs[songIndex].songName;
-        audioElement.currentTime = 0;
-        audioElement.play();
-        logSongHistory(songs[songIndex].songName);
-        gif.style.opacity = 1;
-        masterPlay.classList.remove('fa-circle-play');
-        masterPlay.classList.add('fa-circle-pause');
+        let clickedIndex = parseInt(e.target.id);
+
+        if (clickedIndex === songIndex) {
+            if (audioElement.paused) {
+                audioElement.play();
+                e.target.classList.remove('fa-circle-play');
+                e.target.classList.add('fa-circle-pause');
+                gif.style.opacity = 1;
+                masterPlay.classList.remove('fa-circle-play');
+                masterPlay.classList.add('fa-circle-pause');
+            } else {
+                audioElement.pause();
+                e.target.classList.remove('fa-circle-pause');
+                e.target.classList.add('fa-circle-play');
+                gif.style.opacity = 0;
+                masterPlay.classList.remove('fa-circle-pause');
+                masterPlay.classList.add('fa-circle-play');
+            }
+        } else {
+            makeAllPlays();
+            songIndex = clickedIndex;
+            e.target.classList.remove('fa-circle-play');
+            e.target.classList.add('fa-circle-pause');
+            audioElement.src = `songs/${songIndex + 1}.mp3`;
+            masterSongName.innerText = songs[songIndex].songName;
+            audioElement.currentTime = 0;
+            audioElement.play();
+            logSongHistory(songs[songIndex].songName);
+            gif.style.opacity = 1;
+            masterPlay.classList.remove('fa-circle-play');
+            masterPlay.classList.add('fa-circle-pause');
+        }
     });
 });
 
@@ -123,4 +143,11 @@ document.getElementById('previous').addEventListener('click', () => {
     document.getElementsByClassName('songItemPlay')[songIndex].classList.remove('fa-circle-play');
     document.getElementsByClassName('songItemPlay')[songIndex].classList.add('fa-circle-pause');
 });
+
+// === Prevent cursor focus on click anywhere ===
+document.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    document.activeElement.blur();
+});
+
 

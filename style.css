@@ -6,6 +6,7 @@ body {
     font-family: 'Varela Round', sans-serif;
     margin: 0;
     padding: 0;
+    cursor: default;  /* Default cursor for the page */
 }
 
 * {
@@ -167,17 +168,23 @@ nav ul li {
     margin-top: 20px;
 }
 
+/* Only set cursor for the feedback box */
 .feedback-form textarea {
-    resize: vertical;
-    min-height: 100px;
+    width: 100%;
     padding: 10px;
+    font-size: 16px;
     font-family: 'Varela Round', sans-serif;
-    font-size: 1rem;
     border-radius: 8px;
-    border: none;
+    border: 1px solid #ccc;
+    box-sizing: border-box;  /* Ensures padding is included in the width and height */
+    overflow: auto; /* Ensures the content remains within the box */
+    resize: none;  /* Disables manual resizing */
     outline: none;
+    line-height: 1.6;  /* Improves readability */
+    cursor: text; /* Only text cursor when focused inside the textarea */
 }
 
+/* Button style */
 .feedback-form button {
     width: fit-content;
     padding: 10px 20px;
@@ -208,43 +215,43 @@ nav ul li {
     overflow: hidden;
     font-family: sans-serif;
     z-index: 9999;
-  }
+}
   
-  #chatHeader {
+#chatHeader {
     background-color: #1db954;
     padding: 10px;
     font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
+}
   
-  #chatMessages {
+#chatMessages {
     height: 200px;
     overflow-y: auto;
     padding: 10px;
     background-color: #181818;
-  }
+}
   
-  #userInput {
+#userInput {
     border: none;
     padding: 10px;
     width: 70%;
     background-color: #282828;
     color: white;
     outline: none;
-  }
+}
   
-  #sendBtn {
+#sendBtn {
     width: 30%;
     background-color: #1db954;
     border: none;
     padding: 10px;
     color: white;
     cursor: pointer;
-  }
+}
   
-  #chatIcon {
+#chatIcon {
     background-color: #4CAF50; /* Green background color */
     color: white;              /* White text color */
     padding: 10px 20px;        /* Padding to make the icon more rectangular */
@@ -253,5 +260,21 @@ nav ul li {
     cursor: pointer;          /* Makes it clickable */
     text-align: center;        /* Center the text */
 }
+.feedback-form textarea {
+    cursor: text; /* Only text cursor when focused inside the textarea */
+}
 
-  
+.chat-message {
+    margin: 5px 0;
+}
+.chat-message.user {
+    text-align: right;
+    color: blue;
+}
+.chat-message.bot {
+    text-align: left;
+    color: green;
+}
+
+
+
